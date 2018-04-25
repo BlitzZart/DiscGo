@@ -2,7 +2,6 @@
 using System.Collections;
 using System;
 
-
 public struct DVector
 {
     public double x, y;
@@ -26,7 +25,7 @@ public class GeoCalculations : MonoBehaviour
     public void CalcCorners(double x, double y)
     {
         var centerPoint = new DVector(x, y);
-        var zoom = 18f;
+        var zoom = 16f;
         MercatorProjection();
         GetCorners(centerPoint, zoom, width, height);
     }

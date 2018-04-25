@@ -23,11 +23,8 @@ public class GeoLocation : MonoBehaviour {
     void Start()
     {
 #if UNITY_EDITOR
-        loadWithoutGPS = true; // Test if this caues bugs on android
+        //loadWithoutGPS = true; // Test if this caues bugs on android
 #endif
-        
-
-
         googleMap = GetComponent<GoogleMap>();
         geoCalculations = GetComponent<GeoCalculations>();
 
@@ -40,18 +37,19 @@ public class GeoLocation : MonoBehaviour {
     void Update()
     {
 
-        if (Input.location.lastData.latitude != 0 && Input.location.lastData.longitude != 0 || loadWithoutGPS)
+        if (Input.location.lastData.latitude != 0 && Input.location.lastData.longitude != 0/* || loadWithoutGPS*/ || true)
         { // TODO check boolen in future
 
             if (!loadWithoutGPS) {
                 currentLocation.latitude = (float)Input.location.lastData.latitude; // TOTO change to double if accuracy is an issue
                 currentLocation.longitude = (float)Input.location.lastData.longitude;
+            } else {
+                currentLocation.latitude = latitude;
+                currentLocation.longitude = longitude;
             }
 
             if (!googleMap.mapRendered)
             {
-
-
                 googleMap.mapRendered = true;
                 if (useHardCodedPosition)
                 {
@@ -64,7 +62,6 @@ public class GeoLocation : MonoBehaviour {
                     googleMap.centerLocation.longitude = currentLocation.longitude;
                 }
 
-
                 // calculte corners of image
                 geoCalculations.CalcCorners(googleMap.centerLocation.latitude, googleMap.centerLocation.longitude);
 
@@ -73,18 +70,16 @@ public class GeoLocation : MonoBehaviour {
                 googleMap.SetPlayerMarker(0, geoCalculations.SWCorner);
                 googleMap.SetPlayerMarker(1, geoCalculations.NECorner);
 
-
-
                 googleMap.Refresh();
             }
 
             DVector posOnImage = geoCalculations.GetPixelPos(new DVector(currentLocation.latitude, currentLocation.longitude));
             DVector centerPoint = geoCalculations.centerPoint;
 
-            currentPosition.x = (posOnImage.x - centerPoint.x) * 1280 * 10 / 3.1f;
-            currentPosition.y = -(posOnImage.y - centerPoint.y) * 1280 * 10 / 3.1f;
+            currentPosition.x = (posOnImage.x - centerPoint.x) * 1280 * 6.6f; // No idea where those 6.6f came from!!
+            currentPosition.y = -(posOnImage.y - centerPoint.y) * 1280 * 6.6f;
 
-            
+            //print("Lat: " + currentLocation.latitude);
             //DebugScript.SetText1("X " + currentPosition.x + "\nY " + currentPosition.y + "\nCen: " +  googleMap.centerLocation.latitude + "\nCur: " + currentLocation.latitude);
         }
     }

@@ -25,7 +25,6 @@ public class GoogleMap : MonoBehaviour
 		Hybrid
 	}
 
-
 	public bool autoLocateCenter = true;
 	public GoogleMapLocation centerLocation;
 	public int zoom = 13; // 17 was used @ tech gate
@@ -47,6 +46,7 @@ public class GoogleMap : MonoBehaviour
     private GeoLocation geoLocation;
 
 	void Start() {
+        sprite.transform.Rotate(90, 0, 0);
         geoLocation = this.GetComponent<GeoLocation>();
 	}
 
@@ -151,7 +151,7 @@ public class GoogleMap : MonoBehaviour
         sprite.GetComponent<SpriteRenderer>().sprite = Sprite.Create(nT, new Rect(0, 0, req.texture.width, req.texture.height), new Vector2(0.5f, 0.5f));
 
         ////this.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = req.texture; // draw on mesh (3d objects)
-        sprite.GetComponent<SpriteRenderer>().gameObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
+        sprite.GetComponent<SpriteRenderer>().gameObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
 
         mapRendered = true;
 
@@ -265,7 +265,6 @@ public class GoogleMapPath
 	public GoogleMapLocation[] locations;	
 }
 
-
 public class GoogleMapsAPIProjection
 {
     private readonly double PixelTileSize = 256d; // 256d;
@@ -312,7 +311,6 @@ public class GoogleMapsAPIProjection
             Convert.ToSingle(longitude));
     }
 }
-
 
 
 //void RayCastTest() // WORKS ON A QUAD

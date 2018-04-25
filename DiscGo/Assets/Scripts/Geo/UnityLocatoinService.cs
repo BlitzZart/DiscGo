@@ -4,8 +4,8 @@ using System;
 
 public class UnityLocatoinService : MonoBehaviour {
 
-    private double latitude = 48.305990f;
-    private double longitude = 14.286370;
+    public double latitude = 48.305990f;
+    public double longitude = 14.286370;
 
     private float desiredAccuracy = 8.0f; // in meters
     private float desiredUpdateDistance = 1.0f; // in meters
@@ -55,12 +55,16 @@ public class UnityLocatoinService : MonoBehaviour {
     }
 
     public double GetLatitude() {
-        //return 48.234653d;
+#if UNITY_EDITOR
+        return latitude;
+#endif
         return Input.location.lastData.latitude;
     }
 
     public double GetLongitude() {
-        //return 16.413220d;
+#if UNITY_EDITOR
+        return longitude;
+#endif
         return Input.location.lastData.longitude;
     }
 
