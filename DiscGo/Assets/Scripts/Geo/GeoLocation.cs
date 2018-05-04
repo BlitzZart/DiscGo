@@ -6,12 +6,12 @@ using System;
 public class GeoLocation : MonoBehaviour {
 
     public bool useHardCodedPosition = false;
-    private bool loadWithoutGPS = true;
+    private bool loadWithoutGPS = false;
 
     public float latitude = 0;
     public float longitude = 0;
 
-    private bool dataReceived = false;
+    private bool locationAcive = false;
 
     GoogleMap googleMap;
     GeoCalculations geoCalculations;
@@ -20,10 +20,9 @@ public class GeoLocation : MonoBehaviour {
 
     public static DVector currentPosition = new DVector(99,99);
 
-    void Start()
-    {
+    void Start() {
 #if UNITY_EDITOR
-        //loadWithoutGPS = true; // Test if this caues bugs on android
+        loadWithoutGPS = true; // Test if this caues bugs on android
 #endif
         googleMap = GetComponent<GoogleMap>();
         geoCalculations = GetComponent<GeoCalculations>();
@@ -31,15 +30,16 @@ public class GeoLocation : MonoBehaviour {
         currentLocation = new GoogleMapLocation();
         currentLocation.address = "";
 
-        Input.location.Start();
+        if (loadWithoutGPS)
+            Debug.LogError("Not using GPS");
+        else
+            StartCoroutine(StartLocation());
     }
 
     void Update()
     {
-
-        if (Input.location.lastData.latitude != 0 && Input.location.lastData.longitude != 0/* || loadWithoutGPS*/ || true)
+        if (locationAcive || loadWithoutGPS)
         { // TODO check boolen in future
-
             if (!loadWithoutGPS) {
                 currentLocation.latitude = (float)Input.location.lastData.latitude; // TOTO change to double if accuracy is an issue
                 currentLocation.longitude = (float)Input.location.lastData.longitude;
@@ -81,6 +81,41 @@ public class GeoLocation : MonoBehaviour {
 
             //print("Lat: " + currentLocation.latitude);
             //DebugScript.SetText1("X " + currentPosition.x + "\nY " + currentPosition.y + "\nCen: " +  googleMap.centerLocation.latitude + "\nCur: " + currentLocation.latitude);
+        }
+    }
+
+    private IEnumerator StartLocation() {
+        // First, check if user has location service enabled
+        if (!Input.location.isEnabledByUser) {
+            Debug.LogError("Location service disabled");
+            yield break;
+        }
+
+        // Start service before querying location
+        Input.location.Start(2.0f, 2.0f);
+
+        // Wait until service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0) {
+            yield return new WaitForSeconds(1);
+            maxWait--;
+        }
+
+        // Service didn't initialize in 20 seconds
+        if (maxWait < 1) {
+            Debug.LogError("Timed out - no Location after " + maxWait + " seconds");
+            yield break;
+        }
+
+        // Connection has failed
+        if (Input.location.status == LocationServiceStatus.Failed) {
+            Debug.LogError("Unable to determine device location");
+            yield break;
+        }
+        else {
+            // Access granted and location value could be retrieved
+            locationAcive = true;
+            print("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
         }
     }
 }

@@ -31,17 +31,9 @@ public class GoogleMap : MonoBehaviour
 	public MapType mapType;
 	public int size = 512;
 	public bool doubleResolution = false;
-	public GoogleMapMarker[] markers;
+    public string googleKey = "AIzaSyD2tThLsbaT_fpPgfS6eJldIaPrPsdHSGA";
+    public GoogleMapMarker[] markers;
 	public GoogleMapPath[] paths;
-
-    [Header("SAVE IMAGE")]
-    // next google image will be saved
-    public bool saveNextImage = false;
-    public string imageName = "";
-
-    [Header("STATIC IMAGES")]
-    // use static images to avoid unnecessary downloads
-    public Texture2D TG_MM_1_tex;
 
     private GeoLocation geoLocation;
 
@@ -134,8 +126,8 @@ public class GoogleMap : MonoBehaviour
 		usingSensor = Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running;
 #endif
 		qs += "&sensor=" + (usingSensor ? "true" : "false");
-        
         SetMapStyle(ref qs);
+        qs += "&key=" + googleKey;
 
         var req = new WWW(url + "?" + qs);
 
@@ -154,12 +146,6 @@ public class GoogleMap : MonoBehaviour
         sprite.GetComponent<SpriteRenderer>().gameObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
 
         mapRendered = true;
-
-        if (saveNextImage && imageName != "")
-        {
-            var bytes = nT.EncodeToPNG();
-            File.WriteAllBytes(Application.dataPath + "/../Assets/_StaticImages/" + imageName + ".png", bytes);
-        }
 	}
 
     void SetMapStyle(ref string qs)
@@ -187,7 +173,6 @@ public class GoogleMap : MonoBehaviour
 
         //qs += "&style=feature:administrative%7Cvisibility:off"; // turn off
     }
-
 
     void GetPixelOnMap()
     {

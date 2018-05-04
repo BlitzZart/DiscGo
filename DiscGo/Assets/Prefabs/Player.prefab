@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1700894453752086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4592325616012534}
@@ -160,7 +160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da1435719e513248b8569e900f6ed20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 114366242649365154, guid: c09fb80e96be1eb40a15b6f9eb8c234a,
+  cannonPrefab: {fileID: 114656884667506694, guid: c09fb80e96be1eb40a15b6f9eb8c234a,
+    type: 2}
+  generatorPrefab: {fileID: 114928404527800732, guid: c622687c905173f4d958ff60245356aa,
     type: 2}
 --- !u!135 &135288484967992222
 SphereCollider:

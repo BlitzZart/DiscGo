@@ -47,12 +47,10 @@ public class Player : MonoBehaviour {
 
 #if UNITY_ANDROID && !UNITY_EDITOR 
         debugWithMouse = false;
-
 #else
         debugWithMouse = true;
 #endif
         Input.compass.enabled = true;
-        //InvokeRepeating("PrintNetworkDebugInformation", 1, 0.5f);
 
         PlayerTrigger.PlayerEnteredTile += OnPlayerEnteredTile;
         PlayerTrigger.PlayerLeftTile += OnPlayerLeftTile;
@@ -153,6 +151,4 @@ public class Player : MonoBehaviour {
             //}
         }
     }
-
-
 }

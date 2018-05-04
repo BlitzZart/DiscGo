@@ -34,8 +34,8 @@ public class GeoCalculations : MonoBehaviour
 
     double bound(double value, double opt_min, double opt_max)
     {
-        if (opt_min != null) value = Math.Max(value, opt_min);
-        if (opt_max != null) value = Math.Min(value, opt_max);
+        if (opt_min != 0) value = Math.Max(value, opt_min);
+        if (opt_max != 0) value = Math.Min(value, opt_max);
         return value;
     }
 

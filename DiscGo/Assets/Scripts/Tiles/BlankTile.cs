@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlankTile : Sector {
     public Color InColor;
 
-    public AUnit Slot;
+    public AFacility Slot;
 
     protected override void DoOnEnter(Collider coll) {
         base.DoOnEnter(coll);
