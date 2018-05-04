@@ -100,15 +100,12 @@ public class Player : MonoBehaviour {
         //}
     }
 
-    public Vector3 fakePos = new Vector3(100, 0, 0);
-    private void FakeCurrenPos() {
-        fakePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    }
+
     private bool gotFirstPosition = false;
     void UpdatePlayerPosition() {
         if (debugWithMouse) {
-            FakeCurrenPos();
             if (Input.GetMouseButton(1)) {
+                Vector3 fakePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 //currentPos.transform.position = fakePos;
 
                 Vector3 newPosition = new Vector3(fakePos.x, 0, fakePos.z);
