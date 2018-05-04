@@ -101,7 +101,7 @@ public class GoogleMap : MonoBehaviour
 		if(autoLocateCenter && (markers.Length == 0 && paths.Length == 0)) {
 			Debug.LogError("Auto Center will only work if paths or markers are used.");	
 		}
-
+        print("RUN");
 		StartCoroutine(_Refresh());
 	}
 	

@@ -5,7 +5,7 @@ using UnityEngine;
 public class FacilityManager : MonoBehaviour {
 
 	void Start () {
-		
+
 	}
 	
 	void Update () {

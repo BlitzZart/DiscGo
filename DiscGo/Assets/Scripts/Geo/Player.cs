@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 
-public class Player : MonoBehaviour {
+public class Player : NetworkBehaviour {
     private float speed = 7;
     private float zPosition = 0;
     public bool debugWithMouse = false;
@@ -23,10 +23,6 @@ public class Player : MonoBehaviour {
     [HideInInspector]
     public bool downOnLeftEdge, downOnRightEdge, downOnTopEdge, downOnBottomEdge = false;
 
-    // for debugging
-    float downTime = 0;
-    float holdTime = 0.3f;
-
     // activate all colliders delayed
     private IEnumerator ActivateAllCollidersDelayed() {
         yield return new WaitForSeconds(1.5f);
@@ -39,8 +35,6 @@ public class Player : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        Cursor.visible = true;
-
         toolBox = GetComponent<ToolBox>();
 
         StartCoroutine(ActivateAllCollidersDelayed());
@@ -70,37 +64,12 @@ public class Player : MonoBehaviour {
     Vector3 hit_position = Vector3.zero;
     Vector3 current_position = Vector3.zero;
     Vector3 camera_position = Vector3.zero;
-    float z = 0.0f;
 
-    void LeftMouseDrag() {
-        // Get direction of movement
-        Vector3 direction = Camera.main.ScreenToWorldPoint(current_position) - Camera.main.ScreenToWorldPoint(hit_position);
-
-        // Invert direction to that terrain appears to move with the mouse
-        direction = direction * -1;
-
-        // set camera distatnce
-        camera_position.z = -15;
-
-        Camera.main.transform.position = camera_position + direction;
-    }
-
-    // Update is called once per frame
     void Update() {
-        // -------------------- NW test
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            //SyncDeliver(1);
-        }
-        //GameObject.Find("DebugText").GetComponent<Text>().text = "Sync " + syncInt2;
-        // -------------------- NW test
-
-        //if (currentPos != null) {
-        //print("UPD + has pos");
+        if (!hasAuthority)
+            return;
         UpdatePlayerPosition();
-        //}
     }
-
-
     private bool gotFirstPosition = false;
     void UpdatePlayerPosition() {
         if (debugWithMouse) {
